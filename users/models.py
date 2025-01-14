@@ -103,7 +103,7 @@ class Customer(Base):
         verbose_name_plural = "Customers"
 
     def __str__(self) -> str:
-        return str(self.user.email)
+        return self.user.email
 
     @property
     def discount(self) -> float:

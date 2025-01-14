@@ -3,20 +3,23 @@ from uuid import uuid4
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from users.models import User
+from commons.constants import MembershipLevel
+from users.models import Customer, User
 
 
 class UserModelTests(TestCase):
     def setUp(self) -> None:
         self.name = "John Doe"
         self.email = "johndoe@example.com"
+
         self.password = uuid4().hex
+        self.phone_number = "0704845040"
+
         self.user_data = {
             "name": self.name,
             "email": self.email,
             "password": self.password,
         }
-        self.phone_number = "0704845040"
 
     def test_create_user_success(self) -> None:
         user = User.objects.create_user(
@@ -87,3 +90,51 @@ class UserModelTests(TestCase):
             password=self.user_data["password"],
         )
         self.assertEqual(str(user), self.user_data["email"])
+
+
+class CustomerModelTests(TestCase):
+    def setUp(self) -> None:
+        self.name = "John Doe"
+        self.email = "johndoe@example.com"
+        self.password = uuid4().hex
+
+        self.password = uuid4().hex
+        self.user = User.objects.create_user(
+            name=self.name,
+            email=self.email,
+            password=self.password,
+        )
+
+    def test_create_customer(self) -> None:
+        """
+        Test that a customer can be created and is linked to a user.
+        """
+        customer = Customer.objects.create(user=self.user)
+        self.assertEqual(customer.user, self.user)
+        self.assertEqual(customer.membership, MembershipLevel.BRONZE.value)
+
+    def test_customer_default_membership(self) -> None:
+        """
+        Test that the default membership level is BRONZE.
+        """
+        customer = Customer.objects.create(user=self.user)
+        self.assertEqual(customer.membership, MembershipLevel.BRONZE.value)
+
+    def test_customer_membership_discount(self) -> None:
+        """
+        Test that the discount property returns the correct value.
+        """
+        customer = Customer.objects.create(
+            user=self.user, membership=MembershipLevel.SILVER.value
+        )
+        self.assertEqual(customer.discount, MembershipLevel.SILVER.discount)
+
+        customer.membership = MembershipLevel.GOLD.value
+        self.assertEqual(customer.discount, MembershipLevel.GOLD.discount)
+
+    def test_customer_string_representation(self) -> None:
+        """
+        Test the string representation of the Customer model.
+        """
+        customer = Customer.objects.create(user=self.user)
+        self.assertEqual(str(customer), self.user.email)
