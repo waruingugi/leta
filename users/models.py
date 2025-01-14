@@ -89,6 +89,9 @@ class User(AbstractBaseUser, PermissionsMixin, Base):
     def phone(self) -> str:
         return str(self.phone_number)
 
+    class Meta:
+        ordering = ("-created_at",)
+
 
 class Customer(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer")
@@ -101,6 +104,7 @@ class Customer(Base):
     class Meta:
         verbose_name = "Customer"
         verbose_name_plural = "Customers"
+        ordering = ("-created_at",)
 
     def __str__(self) -> str:
         return self.user.email

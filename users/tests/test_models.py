@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.test import TestCase
 
 from commons.constants import MembershipLevel
@@ -41,6 +42,34 @@ class UserModelTests(TestCase):
                 name=self.user_data["name"],
                 email="",
                 password=self.user_data["password"],
+            )
+
+    def test_email_is_unique(self) -> None:
+        """Test creating a user with a duplicate email raises a ValidationError."""
+        User.objects.create_user(
+            name="user1", email="email1@email.com", password=self.user_data["password"]
+        )
+        with self.assertRaises(IntegrityError):
+            User.objects.create_user(
+                name="user2",
+                email="email1@email.com",
+                password=self.user_data["password"],
+            )
+
+    def test_phone_number_is_unique(self) -> None:
+        """Test creating a user with a duplicate phone_number raises a ValidationError."""
+        User.objects.create_user(
+            name="user3",
+            email="email3@email.com",
+            password=self.user_data["password"],
+            phone_number="+254700000003",
+        )
+        with self.assertRaises(IntegrityError):
+            User.objects.create_user(
+                name="user4",
+                email="email4@email.com",
+                password=self.user_data["password"],
+                phone_number="+254700000003",
             )
 
     def test_create_user_missing_name(self) -> None:
