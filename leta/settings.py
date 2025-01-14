@@ -177,10 +177,12 @@ SIMPLE_JWT = {
 }
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
     "DEFAULT_THROTTLE_RATES": {},
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "commons.pagination.StandardPageNumberPagination",
@@ -197,24 +199,21 @@ CELERY_TIMEZONE = "Africa/Nairobi"
 
 # DRF Spectacular Settings for Swagger
 SPECTACULAR_SETTINGS = {
-    "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_INCLUDE_SCHEMA": False,  # Keeps the schema from being served with the docs
     "SWAGGER_UI_SETTINGS": {
         "defaultModelsExpandDepth": -1,
-        "persistAuthorization": True,
+        "persistAuthorization": True,  # Persist JWT token in the UI so it's available for requests
     },
-    # Only authenticated users can access the schema and documentation views.
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+    # Allow everyone to access the Swagger docs, no authentication needed for viewing.
+    "SERVE_PERMISSIONS": [],
+    # Only JWT authentication is allowed for making requests from the Swagger UI.
     "AUTHENTICATION_WHITELIST": [
-        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "SERVE_AUTHENTICATION": [
-        # User can only view swagger docs if they've logged in via django admin
-        "rest_framework.authentication.SessionAuthentication",
-        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
-
 
 # If DEBUG=True, the system is running in dev environment so load local settings instead
 if DEBUG:
