@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from products.models import Category
+from products.models import Category, Product
 
 
 class CategoryModelTests(TestCase):
@@ -53,3 +53,50 @@ class CategoryModelTests(TestCase):
 
         self.assertEqual(subcategory_2.parent, subcategory_1)
         self.assertEqual(subcategory_1.parent, parent_category)
+
+
+class ProductModelTests(TestCase):
+    def setUp(self):
+        """Set up test data."""
+        self.category = Category.objects.create(name="Electronics")
+        self.product = Product.objects.create(
+            name="Smartphone",
+            description="A high-end smartphone with great features.",
+            price=699.99,
+            stock_quantity=50,
+            is_active=True,
+            category=self.category,
+            reorder_threshold=10,
+        )
+
+    def test_product_creation(self):
+        """Test that a Product instance is created correctly."""
+        product = Product.objects.get(name="Smartphone")
+        self.assertEqual(
+            product.description, "A high-end smartphone with great features."
+        )
+        self.assertEqual(str(product.price), str(699.99))
+        self.assertEqual(product.stock_quantity, 50)
+        self.assertTrue(product.is_active)
+        self.assertEqual(product.category, self.category)
+        self.assertEqual(product.reorder_threshold, 10)
+
+    def test_needs_reorder_true(self):
+        """Test that the needs_reorder method returns True when stock is below threshold."""
+        self.product.stock_quantity = 5
+        self.product.save()
+        self.assertTrue(self.product.needs_reorder())
+
+    def test_needs_reorder_false(self):
+        """Test that the needs_reorder method returns False when stock is above threshold."""
+        self.product.stock_quantity = 20
+        self.product.save()
+        self.assertFalse(self.product.needs_reorder())
+
+    def test_category_relationship(self):
+        """Test the relationship between Product and Category."""
+        self.assertEqual(self.product.category.name, "Electronics")
+
+    def test_str_method(self):
+        """Test the __str__ method of the Product model."""
+        self.assertEqual(str(self.product), "Smartphone")
