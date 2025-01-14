@@ -5,7 +5,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAP
 from commons.pagination import StandardPageNumberPagination
 from commons.permissions import IsStaffOrSelfPermission, IsStaffPermission
 from users.models import User
-from users.serializers import (
+from users.serializers.users import (
     UserCreateSerializer,
     UserListSerializer,
     UserRetrieveUpdateSerializer,
