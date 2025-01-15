@@ -4,6 +4,11 @@ from enum import Enum
 SUPPLIER_SHARE: float = 0.7
 
 
+# Number of best selling products to show in
+# GET /analytics/best-selling-products/
+BEST_SELLING_PRODUCTS_LIMIT: int = 50
+
+
 # Statuses for order model
 class OrderStatus(str, Enum):
     PENDING = "PENDING"
