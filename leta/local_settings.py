@@ -171,6 +171,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
+        "commons.permissions.IsStaffPermission",
     ],
     "DEFAULT_THROTTLE_RATES": {},
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",

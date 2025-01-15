@@ -1,6 +1,5 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
-from rest_framework.views import APIView
 
 
 class IsStaffPermission(BasePermission):
@@ -8,7 +7,7 @@ class IsStaffPermission(BasePermission):
     Custom permission to only allow staff to make requests.
     """
 
-    def has_permission(self, request: Request, view: APIView) -> bool:
+    def has_permission(self, request: Request, view) -> bool:
         return request.user.is_staff  # type: ignore
 
 

@@ -3,7 +3,7 @@ from rest_framework import filters
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 
 from commons.pagination import StandardPageNumberPagination
-from commons.permissions import IsStaffOrSelfPermission, IsStaffPermission
+from commons.permissions import IsStaffOrSelfPermission
 from users.models import User
 from users.serializers.users import (
     UserCreateSerializer,
@@ -17,7 +17,6 @@ class UserCreateView(CreateAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = [IsStaffPermission]
 
 
 class UserListView(ListAPIView):
@@ -25,7 +24,6 @@ class UserListView(ListAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserListSerializer
-    permission_classes = [IsStaffPermission]
     pagination_class = StandardPageNumberPagination
     filter_backends = [
         DjangoFilterBackend,
