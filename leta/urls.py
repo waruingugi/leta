@@ -27,6 +27,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("users.api")),
     path("api/", include("products.api")),
+    path("api/", include("analytics.api")),
     # Swagger documentation
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

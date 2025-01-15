@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "commons",
     "products",
     "orders",
+    "analytics",
 ]
 
 MIDDLEWARE = [

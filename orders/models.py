@@ -57,7 +57,7 @@ class Order(Base):
         ordering = ("-created_at",)
 
     def __str__(self) -> str:
-        return f"Order #{self.id} - {self.customer.name}"
+        return f"Order #{self.id} - {self.customer.user.name}"
 
     def calculate_total_price(self):
         """Recalculate total_price based on associated OrderItems."""

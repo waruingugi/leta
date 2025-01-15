@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from products.models import Category, Product
@@ -31,7 +32,7 @@ class SubcategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name", "parent", "subcategories", "products"]
         read_only_fields = ["id"]
 
-    def get_subcategories(self, obj):
+    def get_subcategories(self, obj) -> list | dict:
         # Recursive logic for subcategories
         queryset = obj.subcategories.all()
         serializer = SubcategorySerializer(queryset, many=True)
@@ -48,6 +49,7 @@ class CategoryBaseSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "parent", "subcategories"]
         read_only_fields = ["id", "parent", "subcategories"]
 
+    @extend_schema_field(SubcategorySerializer(many=True))
     def get_subcategories(self, obj):
         # For flat listing of immediate subcategories
         return SubcategorySerializer(obj.subcategories.all(), many=True).data

@@ -37,6 +37,8 @@ class CategoryRetrieveUpdateView(RetrieveUpdateAPIView):
 class NestedCategoryProductsView(APIView):
     """Fetch all products in a category, including nested subcategories."""
 
+    serializer_class = SubcategorySerializer
+
     def get(self, request, id):
         try:
             category = Category.objects.get(id=id)
