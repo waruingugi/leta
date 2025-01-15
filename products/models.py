@@ -1,5 +1,6 @@
 from django.db import models
 
+from commons.constants import SUPPLIER_SHARE
 from commons.models import Base
 
 
@@ -13,7 +14,20 @@ class Category(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
+        return self.name
+
+
+class Supplier(Base):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        verbose_name = "Supplier"
+        verbose_name_plural = "Suppliers"
+        ordering = ("-created_at",)
+
+    def __str__(self) -> str:
         return self.name
 
 
@@ -31,15 +45,26 @@ class Product(Base):
         blank=True,
     )
     reorder_threshold = models.PositiveIntegerField(default=10)
-
-    def needs_reorder(self):
-        """Check if the product stock is below the reorder threshold."""
-        return self.stock_quantity < self.reorder_threshold
-
-    def __str__(self):
-        return self.name
+    supplier = models.ForeignKey(
+        "Supplier",
+        on_delete=models.SET_NULL,
+        related_name="products",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
         ordering = ("-created_at",)
+
+    def needs_reorder(self) -> bool:
+        """Check if the product stock is below the reorder threshold."""
+        return self.stock_quantity < self.reorder_threshold
+
+    def supplier_share(self) -> float:
+        """Total cut of revenue for supplier."""
+        return float(self.price) * SUPPLIER_SHARE
+
+    def __str__(self) -> str:
+        return self.name

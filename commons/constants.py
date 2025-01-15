@@ -1,5 +1,7 @@
 from enum import Enum
 
+SUPPLIER_SHARE: float = 0.7
+
 
 class MembershipLevel(str, Enum):
     BRONZE = "BRONZE"
