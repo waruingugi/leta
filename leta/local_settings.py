@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "users",
     "commons",
     "products",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,7 @@ TIME_ZONE = "Africa/Nairobi"
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

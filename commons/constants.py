@@ -1,8 +1,22 @@
 from enum import Enum
 
+# Cut from product price that supplier gets
 SUPPLIER_SHARE: float = 0.7
 
 
+# Statuses for order model
+class OrderStatus(str, Enum):
+    PENDING = "PENDING"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+
+
+# Discount Types
+class DiscountType(str, Enum):
+    FLAT = "FLAT"
+
+
+# Customer Membership Levels
 class MembershipLevel(str, Enum):
     BRONZE = "BRONZE"
     SILVER = "SILVER"
