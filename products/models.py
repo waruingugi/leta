@@ -4,7 +4,7 @@ from commons.constants import SUPPLIER_SHARE
 from commons.models import Base
 
 
-class Category(models.Model):
+class Category(Base):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey(
         "self",
@@ -13,6 +13,11 @@ class Category(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Category"
+        ordering = ("-created_at",)
 
     def __str__(self) -> str:
         return self.name
